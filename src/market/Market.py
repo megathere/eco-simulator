@@ -12,15 +12,16 @@ class Market:
         self.company_size = int(os.getenv("COMPANIES_SIZE"))
         self.labor_size = int(os.getenv("LABOR_SIZE"))
         self.iter_size = int(os.getenv("ITERATIONS"))
+        self.labor_value = int(os.getenv("LABOR_VALUE"))
         self.p = Products()
-
-        self.c = []
-        for i in range(self.company_size):
-            self.c.append(Company(i, self.p))
 
         self.l = []
         for i in range(self.labor_size):
-            self.l.append(Labor(i, self.p))
+            self.l.append(Labor(i, self.labor_value, self.p))
+
+        self.c = []
+        for i in range(self.company_size):
+            self.c.append(Company(i, self.p, self.l[i]))
 
     def operate_all(self):
         for i in range(self.iter_size):
