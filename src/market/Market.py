@@ -21,7 +21,7 @@ class Market:
 
         self.c = []
         for i in range(self.company_size):
-            self.c.append(Company(i, self.p, self.l[i]))
+            self.c.append(Company(i, self.p))
 
     def operate_all(self):
         for i in range(self.iter_size):
