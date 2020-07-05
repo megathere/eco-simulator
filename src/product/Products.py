@@ -14,10 +14,10 @@ class Products:
 
     def minus(self, index, value):
         self.values[index] -= value
-        print(self.values)
+        # print(self.values)
         if self.values[index] < 0:
             raise RuntimeError("product value at " + str(index) + " is below 0 (" + self.values[index] + ")")
 
     def add(self, index, value):
         self.values[index] += value
-        print(self.values)
+        # print(self.values)

@@ -28,6 +28,7 @@ class Market:
             self.operate(i)
 
     def operate(self, index):
+        print()
         print("iteration " + str(index))
         print("START: " + str(self.p.get_values()))
         for company in self.c:
