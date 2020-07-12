@@ -1,40 +1,30 @@
 from dotenv import load_dotenv
 import os
+from termcolor import colored
 
 from src.company.Company import Company
-from src.labor.Labor import Labor
-from src.product.Products import Products
 
 
 class Market:
     def __init__(self):
         load_dotenv()
         self.company_size = int(os.getenv("COMPANIES_SIZE"))
-        self.labor_size = int(os.getenv("LABOR_SIZE"))
-        self.iter_size = int(os.getenv("ITERATIONS"))
-        self.labor_value = int(os.getenv("LABOR_VALUE"))
-        self.p = Products()
-
-        self.l = []
-        for i in range(self.labor_size):
-            self.l.append(Labor(i, self.labor_value, self.p))
+        self.iter_size = int(os.getenv("ITERATION_SIZE"))
 
         self.c = []
         for i in range(self.company_size):
-            self.c.append(Company(i, self.p))
+            self.c.append(Company(i))
 
-    def operate_all(self):
-        for i in range(self.iter_size):
-            self.operate(i)
-
-    def operate(self, index):
-        print()
-        print("iteration " + str(index))
-        print("START: " + str(self.p.get_values()))
-        for company in self.c:
-            company.produce()
-        for labor in self.l:
-            labor.consume()
-        for company in self.c:
-            company.consume()
-        print("END: " + str(self.p.get_values()))
+    def operate(self):
+        for ii in range(self.iter_size):
+            print()
+            print("----------- Iteration " + colored(str(ii), 'red') + " ----------")
+            sum_value = 0
+            sum_profit = 0
+            for company in self.c:
+                company.operate()
+                # company.p()
+                sum_value = sum_value + company.get_value()
+                sum_profit = sum_profit + company.get_profit()
+            print("Total Value:\t" + "{:.2f}".format(sum_value))
+            print("Total Profit:\t" + "{:.2f}".format(sum_profit))
