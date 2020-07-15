@@ -6,7 +6,7 @@ class Company:
         self.index = index
         # self.value = np.random.randint(low=10, high=100)
         self.value = 100
-        self.p_margin = market_constants.market_caps[index] / 100 - 1
+        self.margin_coefficient = market_constants.market_margin_coefficient[index]
         # self.p_margin = 0.01
         # self.p_labor = np.random.randint(low=0, high=10) / 10
         self.p_labor = 0.5
@@ -16,21 +16,26 @@ class Company:
 
         self.p()
 
+    def get_margin(self):
+        return self.margin_coefficient / self.value
+
     def operate(self):
-        margin = self.value * self.p_margin
-        margin_to_investment = margin * self.p_re_investment
-        margin_to_profit = margin - margin_to_investment
+        margin = self.value * self.get_margin()
+        market_constants.market_margin[self.index] = self.get_margin()
 
-        # print(str(self.index) + " -> margin_to_investment:\t" + "{:.3f}".format(margin_to_investment))
-        # print(str(self.index) + " -> margin_to_profit:\t" + "{:.3f}".format(margin_to_profit))
+        if self.get_margin() < max(market_constants.market_margin):
+            margin *= 0.8
+            market_constants.bank_balance += margin / 4
+        else:
+            if market_constants.bank_balance > 10:
+                market_constants.bank_balance -= 10
+                self.value += 10
 
-        self.value = self.value + margin_to_investment
-        self.profit = self.profit + margin_to_profit
-
-        # self.add_value(self.index, 1)
+        self.value += margin * self.p_re_investment
+        self.profit += margin * (1 - self.p_re_investment)
 
     def p(self):
-        print(str(self.index) + " -> Margin:\t" + "{:.3f}".format(self.p_margin))
+        print(str(self.index) + " -> Margin:\t" + "{:.3f}".format(self.get_margin()))
         print(str(self.index) + " -> Value:\t\t" + "{:.3f}".format(self.value))
         print(str(self.index) + " -> Profit:\t" + "{:.3f}".format(self.profit))
         # print(str(self.index) + " -> Re-Investment Rate:\t" + "{:.3f}".format(self.p_re_investment))
@@ -38,13 +43,6 @@ class Company:
 
     def get_value(self):
         return self.value
-
-    def add_value(self, index, v):
-        market_constants.flow_stack.append((index, 0, v))
-        print(str(market_constants.flow_stack))
-
-    def abstract_value(self, v):
-        self.value -= v
 
     def get_profit(self):
         return self.profit

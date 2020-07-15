@@ -36,6 +36,8 @@ class Market:
             company.p()
             sum_value = sum_value + company.get_value()
             sum_profit = sum_profit + company.get_profit()
+
+        print("M -> Bank Balance:\t" + "{:.3f}".format(market_constants.bank_balance))
         print("M -> Value:\t\t" + "{:.3f}".format(sum_value))
         print("M -> Profit:\t" + "{:.3f}".format(sum_profit))
-        print("M -> Cap:\t\t" + str(["{:.3f}".format(p) for p in market_constants.market_caps]))
+        print("M -> Margin:\t\t" + str(["{:.3f}".format(p) for p in market_constants.market_margin]))
